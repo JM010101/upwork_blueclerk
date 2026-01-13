@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -112,39 +113,42 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden mt-4 pb-4 space-y-2 border-t border-neutral-light/50 pt-4"
-          >
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`block px-4 py-3 rounded-lg transition-colors font-medium ${
-                    isActive
-                      ? "text-primary bg-primary-light/30"
-                      : "text-neutral-dark hover:text-primary hover:bg-primary-light/10"
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-            <Link
-              href="/signup"
-              className="block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors font-semibold text-center mt-4 shadow-md"
-              onClick={() => setIsMobileMenuOpen(false)}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="lg:hidden mt-4 pb-4 space-y-2 border-t border-neutral-light/50 pt-4 overflow-hidden"
             >
-              Get Started
-            </Link>
-          </motion.div>
-        )}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`block px-4 py-3 rounded-lg transition-colors font-medium ${
+                      isActive
+                        ? "text-primary bg-primary-light/30"
+                        : "text-neutral-dark hover:text-primary hover:bg-primary-light/10"
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
+              <Link
+                href="/signup"
+                className="block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors font-semibold text-center mt-4 shadow-md"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Get Started
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </header>
   );
